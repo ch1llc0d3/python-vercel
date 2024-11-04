@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os 
+import pathlib 
 
 # environ sirve para cargar las variables de entorno del sistema
 from os import environ
@@ -29,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tlv)36c^h%me#0j)!67193036i0(q!%)rm_9k19_&32jf9!t3b'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,16 +84,25 @@ WSGI_APPLICATION = 'python_vercel_task.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# Carga el archivo .env
+env_path = pathlib.Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(env_path)
+
+# Configuración de la base de datos
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'python_vercel_task',
+        'NAME': os.environ.get('DB_NAME'),  # Agrega DB_NAME desde .env
         'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'localhost',
+        'PASSWORD': os.environ.get('SUPABASE_PASSWORD'),
+        'HOST': os.environ.get('SUPABASE_HOST'),
         'PORT': '5432',
     }
 }
+
+# Llave secreta de Django
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+print(f"DB_USER cargado: {os.environ.get('DB_USER')}")
 
 
 # Password validation
