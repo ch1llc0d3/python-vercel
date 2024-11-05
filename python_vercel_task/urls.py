@@ -5,5 +5,5 @@ from django.http import HttpResponseRedirect
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
-    path("", lambda request: HttpResponseRedirect("blog/")),  # Redirect root URL to /blog/
+    path("", include("blog.urls")),
 ]
